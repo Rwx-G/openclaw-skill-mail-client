@@ -124,13 +124,16 @@ def check_config_file(results: Results) -> None:
 
 
 def check_imap_login(creds: dict, config: dict, results: Results) -> bool:
+    if not config.get("allow_read", False) and not config.get("allow_search", False):
+        results.skip("imap-login", "allow_read and allow_search are false")
+        return False
     host = creds.get("MAIL_IMAP_HOST", "")
     port = int(config.get("imap_port", 993))
     user = creds.get("MAIL_USER", "")
     app_key = creds.get("MAIL_APP_KEY", "")
     try:
         ctx = ssl.create_default_context()
-        imap = imaplib.IMAP4_SSL(host, port, ssl_context=ctx)
+        imap = imaplib.IMAP4_SSL(host, port, ssl_context=ctx, timeout=10)
         imap.login(user, app_key)
         imap.logout()
         results.ok("imap-login", f"{user}@{host}:{port}")
