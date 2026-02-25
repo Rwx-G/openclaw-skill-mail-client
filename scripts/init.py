@@ -12,9 +12,10 @@ import smtplib
 import ssl
 import sys
 
-SKILL_DIR = pathlib.Path(__file__).resolve().parent.parent
-CONFIG_PATH = SKILL_DIR / "config.json"
-CREDS_PATH = pathlib.Path.home() / ".openclaw" / "secrets" / "mail_creds"
+SKILL_DIR   = pathlib.Path(__file__).resolve().parent.parent
+_CONFIG_DIR = pathlib.Path.home() / ".openclaw" / "config" / "mail-client"
+CONFIG_PATH = _CONFIG_DIR / "config.json"
+CREDS_PATH  = pathlib.Path.home() / ".openclaw" / "secrets" / "mail_creds"
 
 # ---------------------------------------------------------------------------
 # Results reporter

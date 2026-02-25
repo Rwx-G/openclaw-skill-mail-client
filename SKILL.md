@@ -71,7 +71,7 @@ Expected output: all checks OK or SKIP (none FAIL).
 
 ### 3. Enable capabilities in config.json
 
-Edit `config.json` in the skill root directory:
+Edit `~/.openclaw/config/mail-client/config.json`:
 
 ```json
 {
@@ -94,7 +94,7 @@ Edit `config.json` in the skill root directory:
 | Path | Written by | Purpose | Contains secrets |
 |------|-----------|---------|-----------------|
 | `~/.openclaw/secrets/mail_creds` | `setup.py` | SMTP/IMAP credentials + app key | YES - chmod 600, never committed |
-| `skill_dir/config.json` | `setup.py` | Behavior restrictions, folder/limit defaults | NO - behavior only, not shipped (gitignored) |
+| `~/.openclaw/config/mail-client/config.json` | `setup.py` | Behavior restrictions, folder/limit defaults | NO - behavior only, not in skill dir - survives clawhub updates |
 
 ### `~/.openclaw/secrets/mail_creds`
 
@@ -111,11 +111,11 @@ Ports (`smtp_port`, `imap_port`) and sender address (`mail_from`) are set in `co
 
 Credentials can also be provided via environment variables (`MAIL_USER`, `MAIL_APP_KEY`, `MAIL_SMTP_HOST`, `MAIL_IMAP_HOST`). Environment variables take precedence over file values. The skill checks env vars first, then falls back to the creds file.
 
-### `skill_dir/config.json`
+### `~/.openclaw/config/mail-client/config.json`
 
 Written by `setup.py`. Controls behavior restrictions (which capabilities are enabled).
-Contains no secrets. Not shipped in the repository (gitignored).
-Start from `config.example.json` if you prefer to create it manually.
+Contains no secrets. Not in the skill directory - survives clawhub updates.
+Start from `config.example.json` in the skill dir if you prefer to create it manually.
 
 ---
 

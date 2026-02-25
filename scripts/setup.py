@@ -13,10 +13,11 @@ import smtplib
 import ssl
 import sys
 
-SKILL_DIR = pathlib.Path(__file__).resolve().parent.parent
-CONFIG_PATH = SKILL_DIR / "config.json"
+SKILL_DIR   = pathlib.Path(__file__).resolve().parent.parent
+_CONFIG_DIR = pathlib.Path.home() / ".openclaw" / "config" / "mail-client"
+CONFIG_PATH = _CONFIG_DIR / "config.json"
 SECRETS_DIR = pathlib.Path.home() / ".openclaw" / "secrets"
-CREDS_PATH = SECRETS_DIR / "mail_creds"
+CREDS_PATH  = SECRETS_DIR / "mail_creds"
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -196,6 +197,7 @@ def write_creds(creds: dict) -> None:
 
 
 def write_config(permissions: dict, defaults: dict) -> None:
+    _CONFIG_DIR.mkdir(parents=True, exist_ok=True)
     config = {
         "allow_send": permissions["allow_send"],
         "allow_read": permissions["allow_read"],
