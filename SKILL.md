@@ -7,7 +7,7 @@ metadata:
   {
     "openclaw": {
       "emoji": "📧",
-      "requires": { "env": ["MAIL_USER", "MAIL_APP_KEY"] },
+      "requires": { "env": ["MAIL_USER", "MAIL_APP_KEY", "MAIL_SMTP_HOST", "MAIL_IMAP_HOST"] },
       "primaryEnv": "MAIL_APP_KEY"
     }
   }
