@@ -117,10 +117,9 @@ Written by `setup.py`. Controls behavior restrictions (which capabilities are en
 Contains no secrets. Not in the skill directory - survives clawhub updates.
 Start from `config.example.json` in the skill dir if you prefer to create it manually.
 
-**Cleanup on uninstall:** `clawhub uninstall mail-client` removes the skill directory but leaves config and credentials in place. Clean manually if needed:
+**Cleanup on uninstall:** `clawhub uninstall mail-client` removes the skill directory. To also remove credentials and config:
 ```bash
-rm -rf ~/.openclaw/config/mail-client
-rm ~/.openclaw/secrets/mail_creds
+python3 scripts/setup.py --cleanup
 ```
 On reinstall, any existing config at `~/.openclaw/config/mail-client/config.json` is picked up automatically.
 

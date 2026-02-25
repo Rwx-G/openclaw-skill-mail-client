@@ -216,11 +216,40 @@ def write_config(permissions: dict, defaults: dict) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Cleanup
+# ---------------------------------------------------------------------------
+
+
+def cleanup() -> None:
+    """Remove all persistent files written by this skill (credentials + config)."""
+    print("Removing mail-client skill persistent files...")
+    removed = []
+    for path in [CREDS_PATH, CONFIG_PATH]:
+        if path.exists():
+            path.unlink()
+            removed.append(str(path))
+    try:
+        _CONFIG_DIR.rmdir()
+    except OSError:
+        pass
+    if removed:
+        for p in removed:
+            print(f"  Removed: {p}")
+        print("Done. Re-run setup.py to reconfigure.")
+    else:
+        print("  Nothing to remove.")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
 
 def main() -> None:
+    if "--cleanup" in sys.argv:
+        cleanup()
+        return
+
     print()
     print("=" * 60)
     print("  OpenClaw mail-client - Setup Wizard")
