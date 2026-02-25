@@ -58,20 +58,25 @@ class Results:
 
 
 def load_creds() -> dict:
-    if not CREDS_PATH.exists():
-        print(f"[error] Credentials file not found: {CREDS_PATH}")
-        print("        Run  python3 scripts/setup.py  first.")
-        sys.exit(1)
+    """Load credentials from file then override with environment variables."""
     creds: dict = {}
-    with open(CREDS_PATH, "r", encoding="utf-8") as fh:
-        for line in fh:
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            if "=" not in line:
-                continue
-            key, _, value = line.partition("=")
-            creds[key.strip()] = value.strip()
+    if CREDS_PATH.exists():
+        with open(CREDS_PATH, "r", encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                if "=" not in line:
+                    continue
+                key, _, value = line.partition("=")
+                creds[key.strip()] = value.strip()
+    # Environment variables override file values
+    for key in ("MAIL_USER", "MAIL_APP_KEY", "MAIL_SMTP_HOST", "MAIL_IMAP_HOST"):
+        if key in os.environ:
+            creds[key] = os.environ[key]
+    if not creds.get("MAIL_USER") or not creds.get("MAIL_APP_KEY"):
+        print(f"[error] Credentials missing. Provide env vars or run scripts/setup.py.")
+        sys.exit(1)
     return creds
 
 

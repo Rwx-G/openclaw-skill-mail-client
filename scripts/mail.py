@@ -63,22 +63,31 @@ class PermissionDeniedError(MailError):
 
 
 def _load_creds(path: pathlib.Path = CREDS_PATH) -> dict:
-    """Load key=value credentials from the creds file."""
-    if not path.exists():
-        raise MailError(
-            f"Credentials file not found: {path}\n"
-            "Run scripts/setup.py to create it."
-        )
+    """Load credentials from file then override with environment variables.
+
+    Precedence: env vars > creds file.
+    Required vars: MAIL_USER, MAIL_APP_KEY, MAIL_SMTP_HOST, MAIL_IMAP_HOST.
+    """
     creds: dict = {}
-    with open(path, "r", encoding="utf-8") as fh:
-        for line in fh:
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            if "=" not in line:
-                continue
-            key, _, value = line.partition("=")
-            creds[key.strip()] = value.strip()
+    if path.exists():
+        with open(path, "r", encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                if "=" not in line:
+                    continue
+                key, _, value = line.partition("=")
+                creds[key.strip()] = value.strip()
+    # Environment variables override file values
+    for key in ("MAIL_USER", "MAIL_APP_KEY", "MAIL_SMTP_HOST", "MAIL_IMAP_HOST"):
+        if key in os.environ:
+            creds[key] = os.environ[key]
+    if not creds.get("MAIL_USER") or not creds.get("MAIL_APP_KEY"):
+        raise MailError(
+            f"Credentials missing. Provide MAIL_USER / MAIL_APP_KEY via env vars "
+            f"or run scripts/setup.py to create {path}."
+        )
     return creds
 
 
