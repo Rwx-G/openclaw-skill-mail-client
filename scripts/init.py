@@ -117,9 +117,9 @@ def check_config_file(results: Results) -> None:
         results.skip("config-file", "not found (run setup.py to create)")
 
 
-def check_imap_login(creds: dict, results: Results) -> bool:
+def check_imap_login(creds: dict, config: dict, results: Results) -> bool:
     host = creds.get("MAIL_IMAP_HOST", "")
-    port = int(creds.get("MAIL_IMAP_PORT", 993))
+    port = int(config.get("imap_port", 993))
     user = creds.get("MAIL_USER", "")
     app_key = creds.get("MAIL_APP_KEY", "")
     try:
@@ -142,7 +142,7 @@ def check_imap_list(creds: dict, config: dict, results: Results) -> None:
         results.skip("imap-list-folder", "allow_read is false")
         return
     host = creds.get("MAIL_IMAP_HOST", "")
-    port = int(creds.get("MAIL_IMAP_PORT", 993))
+    port = int(config.get("imap_port", 993))
     user = creds.get("MAIL_USER", "")
     app_key = creds.get("MAIL_APP_KEY", "")
     folder = config.get("default_folder", "INBOX")
@@ -166,7 +166,7 @@ def check_imap_search(creds: dict, config: dict, results: Results) -> None:
         results.skip("imap-search", "allow_search is false")
         return
     host = creds.get("MAIL_IMAP_HOST", "")
-    port = int(creds.get("MAIL_IMAP_PORT", 993))
+    port = int(config.get("imap_port", 993))
     user = creds.get("MAIL_USER", "")
     app_key = creds.get("MAIL_APP_KEY", "")
     folder = config.get("default_folder", "INBOX")
@@ -191,7 +191,7 @@ def check_smtp(creds: dict, config: dict, results: Results) -> None:
         results.skip("smtp-login", "allow_send is false")
         return
     host = creds.get("MAIL_SMTP_HOST", "")
-    port = int(creds.get("MAIL_SMTP_PORT", 587))
+    port = int(config.get("smtp_port", 587))
     user = creds.get("MAIL_USER", "")
     app_key = creds.get("MAIL_APP_KEY", "")
     try:
@@ -210,9 +210,9 @@ def check_smtp(creds: dict, config: dict, results: Results) -> None:
 
 def check_required_cred_keys(creds: dict, results: Results) -> None:
     required = [
-        "MAIL_SMTP_HOST", "MAIL_SMTP_PORT",
-        "MAIL_IMAP_HOST", "MAIL_IMAP_PORT",
-        "MAIL_USER", "MAIL_APP_KEY", "MAIL_FROM",
+        "MAIL_SMTP_HOST",
+        "MAIL_IMAP_HOST",
+        "MAIL_USER", "MAIL_APP_KEY",
     ]
     missing = [k for k in required if not creds.get(k)]
     if missing:
@@ -242,7 +242,7 @@ def main() -> None:
     check_required_cred_keys(creds, results)
     check_config_file(results)
 
-    imap_ok = check_imap_login(creds, results)
+    imap_ok = check_imap_login(creds, config, results)
     if imap_ok:
         check_imap_list(creds, config, results)
         check_imap_search(creds, config, results)

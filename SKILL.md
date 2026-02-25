@@ -79,6 +79,9 @@ Edit `config.json` in the skill root directory:
   "allow_read": true,
   "allow_search": true,
   "allow_delete": false,
+  "smtp_port": 587,
+  "imap_port": 993,
+  "mail_from": "you@example.com",
   "default_folder": "INBOX",
   "max_results": 20
 }
@@ -99,13 +102,12 @@ Written by `setup.py`, chmod 600, never committed to git. Contains:
 
 ```
 MAIL_SMTP_HOST=mail.example.com
-MAIL_SMTP_PORT=587
 MAIL_IMAP_HOST=mail.example.com
-MAIL_IMAP_PORT=993
 MAIL_USER=user@example.com
 MAIL_APP_KEY=app-password-here
-MAIL_FROM=user@example.com
 ```
+
+Ports (`smtp_port`, `imap_port`) and sender address (`mail_from`) are set in `config.json` - they are configuration, not credentials.
 
 ### `skill_dir/config.json`
 

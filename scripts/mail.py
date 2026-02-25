@@ -37,6 +37,9 @@ _DEFAULT_CONFIG = {
     "allow_read": False,
     "allow_search": False,
     "allow_delete": False,
+    "smtp_port": 587,
+    "imap_port": 993,
+    "mail_from": "",
     "default_folder": "INBOX",
     "max_results": 20,
 }
@@ -108,12 +111,13 @@ class MailClient:
         self._config = config if config is not None else _load_config()
 
         self._smtp_host = self._creds.get("MAIL_SMTP_HOST", "")
-        self._smtp_port = int(self._creds.get("MAIL_SMTP_PORT", 587))
         self._imap_host = self._creds.get("MAIL_IMAP_HOST", "")
-        self._imap_port = int(self._creds.get("MAIL_IMAP_PORT", 993))
         self._user = self._creds.get("MAIL_USER", "")
         self._app_key = self._creds.get("MAIL_APP_KEY", "")
-        self._from = self._creds.get("MAIL_FROM", self._user)
+
+        self._smtp_port = int(self._config.get("smtp_port", _DEFAULT_CONFIG["smtp_port"]))
+        self._imap_port = int(self._config.get("imap_port", _DEFAULT_CONFIG["imap_port"]))
+        self._from = self._config.get("mail_from", "") or self._user
 
         self._default_folder: str = self._config.get(
             "default_folder", _DEFAULT_CONFIG["default_folder"]
