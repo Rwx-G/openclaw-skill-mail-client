@@ -109,14 +109,7 @@ MAIL_APP_KEY=app-password-here
 
 Ports (`smtp_port`, `imap_port`) and sender address (`mail_from`) are set in `config.json` - they are configuration, not credentials.
 
-Credentials can also be provided via environment variables instead of the file. Environment variables take precedence over file values:
-
-```bash
-export MAIL_USER=user@example.com
-export MAIL_APP_KEY=your-app-password
-export MAIL_SMTP_HOST=mail.example.com
-export MAIL_IMAP_HOST=mail.example.com
-```
+Credentials can also be provided via environment variables (`MAIL_USER`, `MAIL_APP_KEY`, `MAIL_SMTP_HOST`, `MAIL_IMAP_HOST`). Environment variables take precedence over file values. The skill checks env vars first, then falls back to the creds file.
 
 ### `skill_dir/config.json`
 
