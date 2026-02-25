@@ -1,19 +1,19 @@
 ---
 name: mail-client
-description: IMAP read/search + SMTP send for any standard IMAP/SMTP server. NOT for: bulk mailing, newsletters, calendar/contacts.
+description: "IMAP/SMTP mail client for OpenClaw agents. Use when: (1) reading or listing emails from a mailbox, (2) searching emails by sender, subject, date or text, (3) sending emails with plain text or HTML body, (4) moving, marking, or deleting messages. NOT for: bulk mailing, newsletters, calendar/contacts (use CalDAV), or providers requiring OAuth (use a dedicated skill)."
 homepage: https://github.com/Rwx-G/openclaw-skill-mail-client
-compatibility: Python 3.9+ - no external dependencies - network access to mail server
-emoji: "📧"
-requires_env:
-  - MAIL_USER
-  - MAIL_APP_KEY
-primary_env: MAIL_APP_KEY
+compatibility: Python 3.9+ - no external dependencies (stdlib only) - network access to IMAP/SMTP server
+metadata:
+  {
+    "openclaw": {
+      "emoji": "📧",
+      "requires": { "env": ["MAIL_USER", "MAIL_APP_KEY"] },
+      "primaryEnv": "MAIL_APP_KEY"
+    }
+  }
 ontology:
-  reads:
-    - emails
-  writes:
-    - emails
-    - flags
+  reads: [emails]
+  writes: [emails, flags]
 ---
 
 # mail-client
