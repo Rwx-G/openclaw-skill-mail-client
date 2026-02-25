@@ -1,6 +1,6 @@
 ---
 name: mail-client
-description: "IMAP/SMTP mail client for OpenClaw agents. Use when: (1) reading or listing emails from a mailbox, (2) searching emails by sender, subject, date or text, (3) sending emails with plain text or HTML body, (4) moving, marking, or deleting messages. NOT for: bulk mailing, newsletters, calendar/contacts (use CalDAV), or providers requiring OAuth (use a dedicated skill)."
+description: "IMAP/SMTP mail client for OpenClaw agents. Use when: (1) reading or listing emails from a mailbox, (2) searching emails by sender, subject, date or text, (3) sending emails with plain text or HTML body, with optional file attachments, (4) moving, marking, or deleting messages. NOT for: bulk mailing, newsletters, calendar/contacts (use CalDAV), or providers requiring OAuth (use a dedicated skill)."
 homepage: https://github.com/Rwx-G/openclaw-skill-mail-client
 compatibility: Python 3.9+ - no external dependencies (stdlib only) - network access to IMAP/SMTP server
 metadata:
@@ -152,6 +152,15 @@ result = client.send(
 )
 print(result)
 
+# Send with attachments
+result = client.send(
+    to="alice@example.com",
+    subject="Report Q1",
+    body="Please find attached the Q1 report.",
+    attachments=["report.pdf", "data.xlsx"],
+)
+print(result)
+
 # Search
 found = client.search_messages(from_addr="bob@example.com", unseen_only=True)
 ```
@@ -169,7 +178,7 @@ python3 scripts/mail.py <subcommand> [options]
 | `list` | allow_read | List messages (newest first) |
 | `read <uid>` | allow_read | Read a full message by UID |
 | `search` | allow_search | Search with filters |
-| `send` | allow_send | Send an email |
+| `send` | allow_send | Send an email (with optional `--attachment`) |
 | `move <uid> <folder>` | allow_delete | Move message to folder |
 | `mark-read <uid>` | allow_read | Mark as read |
 | `mark-unread <uid>` | allow_read | Mark as unread |
@@ -202,6 +211,13 @@ python3 scripts/mail.py send \
   --subject "Report" \
   --body "Please find attached." \
   --cc manager@example.com
+
+# Send with attachments
+python3 scripts/mail.py send \
+  --to recipient@example.com \
+  --subject "Report Q1" \
+  --body "See attached." \
+  --attachment report.pdf data.xlsx
 
 # Move UID 42 to Archive
 python3 scripts/mail.py move 42 Archive

@@ -7,5 +7,6 @@
   "imap_port": 993,
   "mail_from": "",
   "default_folder": "INBOX",
-  "max_results": 20
+  "max_results": 20,
+  "max_attachment_bytes": 25000000
 }
